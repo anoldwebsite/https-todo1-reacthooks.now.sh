@@ -2,6 +2,7 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
 const API_ENDPOINT = "https://todos-api-nuquyjkqpx.now.sh/todos";
+//const API_DB_ENDPOINT = "https://todos-api-nuquyjkqpx.now.sh/db";
 
 export const getAllToDos = async () => {
     try {
@@ -10,6 +11,44 @@ export const getAllToDos = async () => {
     } catch (error) {
         console.log(error);
     }
+};
+
+export const swap = async (me, myNeighbour) => {
+    try {
+          await axios.put(`${API_ENDPOINT}/${me.id}`,
+            {
+              ...me,
+              text: myNeighbour.text,
+              complete: myNeighbour.complete
+            }
+          );
+          await axios.put(`${API_ENDPOINT}/${myNeighbour.id}`,
+            {
+              ...myNeighbour,
+              text: me.text,
+              complete: me.complete
+            }
+          );
+        }catch (error) {
+          console.log(error);
+        }
+  };
+
+export const moveUpOrDownToDo = async (clickedToDo, upOrDown) => {
+    let tasks = await getAllToDos();
+    const indexOfClickedToDo = tasks.findIndex(element => element.id === clickedToDo.id);
+    let indexOfNeighbor;
+    if (upOrDown == "up") {
+        if (indexOfClickedToDo == 0) return tasks;
+        indexOfNeighbor = indexOfClickedToDo - 1;
+    } else if (upOrDown == "down") {
+        if (indexOfClickedToDo == tasks.length - 1) return tasks;
+        indexOfNeighbor = indexOfClickedToDo + 1;
+    }
+    const myNeighbour = tasks[indexOfNeighbor];
+    await swap(clickedToDo, myNeighbour);
+    tasks = await getAllToDos();
+    return tasks;
 };
 
 //Fetch API data - i.e. todo tasks both marked as completed or not completed

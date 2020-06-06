@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import ToDosContext from '../context';
-import { toggle, deleteToDo } from './backend/Crud.component';
+import { toggle, deleteToDo, moveUpOrDownToDo } from './backend/Crud.component';
 
 export default function ToDoList() {
     const { state, dispatch } = useContext(ToDosContext);
@@ -17,7 +17,7 @@ export default function ToDoList() {
                     payload: todoObjectAfterToggling
                 }
             );
-        }else{
+        } else {
             dispatch(
                 {
                     type: "DO_NOTHING",
@@ -69,7 +69,36 @@ export default function ToDoList() {
 
                                 <img src="https://icon.now.sh/delete/8b0000" alt="Delete Icon" className="h-6" />
                             </button>
-
+                            <button
+                                onClick={async () => {
+                                    const todosArray = await moveUpOrDownToDo(todo, 'up');
+                                    if (todosArray) {
+                                        dispatch(
+                                            {
+                                                type: 'MOVE_UP',
+                                                payload: todosArray
+                                            }
+                                        );
+                                    }
+                                }}
+                            >
+                                <img src="https://icon.now.sh/arrow_upward" alt="Move Up" className="h-6" />
+                            </button>
+                            <button
+                                onClick={async () => {
+                                    const todosArray = await moveUpOrDownToDo(todo, 'down');
+                                    if (todosArray) {
+                                        dispatch(
+                                            {
+                                                type: 'MOVE_DOWN',
+                                                payload: todosArray
+                                            }
+                                        );
+                                    }
+                                }}
+                            >
+                                <img src="https://icon.now.sh/arrow_downward" alt="Move Down" className="h-6" />
+                            </button>
                         </li>
                     ))
                 }

@@ -1,9 +1,8 @@
-import { act } from "react-dom/test-utils";
-import { v4 as uuidv4 } from 'uuid';//importing package to create unique ids for our objects
-
 export default function reducer(state, action) {
     switch (action.type) {
         case 'GET_TODOS':
+        case 'MOVE_UP':
+        case 'MOVE_DOWN':
             return {
                 ...state,
                 todos: action.payload
