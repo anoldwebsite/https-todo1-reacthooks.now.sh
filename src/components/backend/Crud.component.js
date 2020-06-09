@@ -54,7 +54,8 @@ export const moveUpOrDownToDo = async (clickedToDo, upOrDown) => {
 //Fetch API data - i.e. todo tasks both marked as completed or not completed
 export const getToDosBasedOnQueryTerm = async (query, controller) => {
     try {
-        const response = await axios(`${API_ENDPOINT}?text=${query}`, { signal: controller.signal });
+        //const response = await axios(`${API_ENDPOINT}?text=${query}`, { signal: controller.signal });
+        const response = await axios(`${API_ENDPOINT}?q=${query}`, { signal: controller.signal });
         console.log(response.data);
         if (response.data && response.data.length > 0) return response.data;
         return getAllToDos();
