@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
-const API_ENDPOINT = "https://todos-api-nuquyjkqpx.now.sh/todos";
+const API_ENDPOINT = "https://todos-api-lilac.now.sh/todos";
+//const API_ENDPOINT = "https://todos-api-lilac.now.sh/db";
+//const API_ENDPOINT = "https://todos-api-nuquyjkqpx.now.sh/todos";
 //const API_DB_ENDPOINT = "https://todos-api-nuquyjkqpx.now.sh/db";
 
 export const getAllToDos = async () => {
@@ -15,24 +17,24 @@ export const getAllToDos = async () => {
 
 export const swap = async (me, myNeighbour) => {
     try {
-          await axios.put(`${API_ENDPOINT}/${me.id}`,
+        await axios.put(`${API_ENDPOINT}/${me.id}`,
             {
-              ...me,
-              text: myNeighbour.text,
-              complete: myNeighbour.complete
+                ...me,
+                text: myNeighbour.text,
+                complete: myNeighbour.complete
             }
-          );
-          await axios.put(`${API_ENDPOINT}/${myNeighbour.id}`,
+        );
+        await axios.put(`${API_ENDPOINT}/${myNeighbour.id}`,
             {
-              ...myNeighbour,
-              text: me.text,
-              complete: me.complete
+                ...myNeighbour,
+                text: me.text,
+                complete: me.complete
             }
-          );
-        }catch (error) {
-          console.log(error);
-        }
-  };
+        );
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 export const moveUpOrDownToDo = async (clickedToDo, upOrDown) => {
     let tasks = await getAllToDos();
